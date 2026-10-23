@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyTrade AI - Ultimate Trading Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23g)'/%3E%3Cpath d='M20 70 L40 50 L55 60 L80 30' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='80' cy='30' r='5' fill='white'/%3E%3C/svg%3E">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader-screen" id="loaderScreen">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <div class="loader-cube">
+                    <div class="loader-face"></div>
+                    <div class="loader-face"></div>
+                    <div class="loader-face"></div>
+                    <div class="loader-face"></div>
+                    <div class="loader-face"></div>
+                    <div class="loader-face"></div>
+                </div>
+            </div>
+            <h1 class="loader-title">Money<span>Trade</span></h1>
+            <div class="loader-progress">
+                <div class="loader-bar" id="loaderBar"></div>
+            </div>
+            <p class="loader-text" id="loaderText">Initializing AI Systems...</p>
+        </div>
+    </div>
+
+    <!-- Theme Selector -->
+    <div class="theme-selector" id="themeSelector">
+        <button class="theme-toggle" id="themeToggle" title="Change Theme">
+            <i class="fas fa-palette"></i>
+        </button>
+        <div class="theme-panel" id="themePanel">
+            <h4>Choose Theme</h4>
+            <div class="theme-options">
+                <button class="theme-opt active" data-theme="default" style="background: linear-gradient(135deg, #6366f1, #06b6d4)"></button>
+                <button class="theme-opt" data-theme="sunset" style="background: linear-gradient(135deg, #f59e0b, #ef4444)"></button>
+                <button class="theme-opt" data-theme="forest" style="background: linear-gradient(135deg, #10b981, #059669)"></button>
+                <button class="theme-opt" data-theme="purple" style="background: linear-gradient(135deg, #a855f7, #ec4899)"></button>
+                <button class="theme-opt" data-theme="ocean" style="background: linear-gradient(135deg, #0ea5e9, #2563eb)"></button>
+                <button class="theme-opt" data-theme="rose" style="background: linear-gradient(135deg, #fb7185, #f43f5e)"></button>
+                <button class="theme-opt" data-theme="gold" style="background: linear-gradient(135deg, #fbbf24, #d97706)"></button>
+                <button class="theme-opt" data-theme="neon" style="background: linear-gradient(135deg, #84cc16, #06b6d4)"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Animated Background -->
+    <div class="bg-animation">
+        <canvas id="particleCanvas"></canvas>
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="floating-orb orb-4"></div>
+        <div class="floating-orb orb-5"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Command Palette -->
+    <div class="command-palette" id="commandPalette">
+        <div class="command-backdrop"></div>
+        <div class="command-modal">
+            <div class="command-input-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Type a command or search..." id="commandInput" autocomplete="off">
+                <kbd>ESC</kbd>
+            </div>
+            <div class="command-list" id="commandList">
+                <div class="command-category">Navigation</div>
+                <div class="command-item" data-action="go-chat">
+                    <i class="fas fa-comments"></i>
+                    <div>
+                        <span>Go to Chat</span>
+                        <small>Open the AI chatbot</small>
+                    </div>
+                    <kbd>G C</kbd>
+                </div>
+                <div class="command-item" data-action="go-dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <span>Go to Dashboard</span>
+                        <small>View market overview</small>
+                    </div>
+                    <kbd>G D</kbd>
+                </div>
+                <div class="command-item" data-action="go-trading">
+                    <i class="fas fa-coins"></i>
+                    <div>
+                        <span>Trading Simulator</span>
+                        <small>Practice with virtual money</small>
+                    </div>
+                    <kbd>G T</kbd>
+                </div>
+                <div class="command-item" data-action="go-settings">
+                    <i class="fas fa-cog"></i>
+                    <div>
+                        <span>Settings</span>
+                        <small>Customize your experience</small>
+                    </div>
+                    <kbd>G S</kbd>
+                </div>
+                <div class="command-category">Actions</div>
+                <div class="command-item" data-action="new-chat">
+                    <i class="fas fa-plus"></i>
+                    <div>
+                        <span>New Chat</span>
+                        <small>Start a fresh conversation</small>
+                    </div>
+                    <kbd>N C</kbd>
+                </div>
+                <div class="command-item" data-action="toggle-theme">
+                    <i class="fas fa-moon"></i>
+                    <div>
+                        <span>Toggle Theme</span>
+                        <small>Switch dark/light mode</small>
+                    </div>
+                    <kbd>Ctrl Shift T</kbd>
+                </div>
+                <div class="command-item" data-action="export-chat">
+                    <i class="fas fa-download"></i>
+                    <div>
+                        <span>Export Chat</span>
+                        <small>Download conversation as text</small>
+                    </div>
+                    <kbd>Ctrl E</kbd>
+                </div>
+                <div class="command-item" data-action="clear-chat">
+                    <i class="fas fa-trash"></i>
+                    <div>
+                        <span>Clear Chat</span>
+                        <small>Delete all messages</small>
+                    </div>
+                    <kbd>Ctrl K</kbd>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="achievement-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <div class="achievement-content">
+            <span class="achievement-label">Achievement Unlocked!</span>
+            <span class="achievement-name" id="achievementName">First Trade</span>
+            <span class="achievement-desc" id="achievementDesc">Made your first trade</span>
+        </div>
+        <button class="achievement-close" onclick="document.getElementById('achievementPopup').classList.remove('show')">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Login/Signup Container -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-wrapper">
+            <div class="auth-card" id="authCard">
+                <!-- Login Form -->
+                <div class="form-side login-side">
+                    <div class="form-content">
+                        <div class="logo-section">
+                            <div class="logo-3d">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h1 class="brand-name">Money<span class="highlight">Trade</span></h1>
+                            <p class="brand-tagline">AI-Powered Trading Assistant</p>
+                        </div>
+                        <h2 class="form-title">Welcome Back</h2>
+                        <p class="form-subtitle">Sign in to access your trading dashboard</p>
+                        <form class="auth-form" id="loginForm">
+                            <div class="input-group">
+                                <div class="input-icon"><i class="fas fa-envelope"></i></div>
+                                <input type="email" placeholder="Email Address" required id="loginEmail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-icon"><i class="fas fa-lock"></i></div>
+                                <input type="password" placeholder="Password" required id="loginPassword">
+                                <button type="button" class="toggle-pw" data-target="loginPassword"><i class="fas fa-eye"></i></button>
+                            </div>
+                            <div class="form-options">
+                                <label class="checkbox-container">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                    Remember me
+                                </label>
+                                <a href="#" class="forgot-link" id="forgotLink">Forgot Password?</a>
+                            </div>
+                            <button type="submit" class="auth-btn">
+                                <span>Sign In</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </form>
+                        <div class="divider"><span>OR</span></div>
+                        <div class="social-login">
+                            <button class="social-btn" data-provider="google"><i class="fab fa-google"></i></button>
+                            <button class="social-btn" data-provider="apple"><i class="fab fa-apple"></i></button>
+                            <button class="social-btn" data-provider="github"><i class="fab fa-github"></i></button>
+                            <button class="social-btn" data-provider="discord"><i class="fab fa-discord"></i></button>
+                        </div>
+                        <p class="switch-form">Don't have an account? <a href="#" id="showSignup">Sign Up</a></p>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <div class="form-side signup-side">
+                    <div class="form-content">
+                        <div class="logo-section">
+                            <div class="logo-3d">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h1 class="brand-name">Money<span class="highlight">Trade</span></h1>
+                            <p class="brand-tagline">Join the Future of Trading</p>
+                        </div>
+                        <h2 class="form-title">Create Account</h2>
+                        <p class="form-subtitle">Start your AI trading journey today</p>
+                        <form class="auth-form" id="signupForm">
+                            <div class="input-group">
+                                <div class="input-icon"><i class="fas fa-user"></i></div>
+                                <input type="text" placeholder="Full Name" required id="signupName" minlength="2">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-icon"><i class="fas fa-envelope"></i></div>
+                                <input type="email" placeholder="Email Address" required id="signupEmail">
+                            </div>
+                            <div class="input-group">
+                                <div class="input-icon"><i class="fas fa-lock"></i></div>
+                                <input type="password" placeholder="Create Password" required id="signupPassword" minlength="6">
+                                <button type="button" class="toggle-pw" data-target="signupPassword"><i class="fas fa-eye"></i></button>
+                            </div>
+                            <div class="password-strength" id="passwordStrength">
+                                <div class="strength-bars">
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                </div>
+                                <span class="strength-text">Password strength</span>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-icon"><i class="fas fa-building"></i></div>
+                                <input type="text" placeholder="Company Name (Optional)" id="signupCompany">
+                            </div>
+                            <div class="terms-check">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" required id="termsCheck">
+                                    <span class="checkmark"></span>
+                                    I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>
+                                </label>
+                            </div>
+                            <div class="terms-check">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="signupAdmin">
+                                    <span class="checkmark"></span>
+                                    Sign up as an administrator
+                                </label>
+                            </div>
+                            <button type="submit" class="auth-btn">
+                                <span>Create Account</span>
+                                <i class="fas fa-rocket"></i>
+                            </button>
+                        </form>
+                        <div class="divider"><span>OR</span></div>
+                        <div class="social-login">
+                            <button class="social-btn" data-provider="google"><i class="fab fa-google"></i></button>
+                            <button class="social-btn" data-provider="apple"><i class="fab fa-apple"></i></button>
+                            <button class="social-btn" data-provider="github"><i class="fab fa-github"></i></button>
+                            <button class="social-btn" data-provider="discord"><i class="fab fa-discord"></i></button>
+                        </div>
+                        <p class="switch-form">Already have an account? <a href="#" id="showLogin">Sign In</a></p>
+                    </div>
+                </div>
+
+                <!-- 3D Side Panel -->
+                <div class="side-panel">
+                    <div class="panel-content">
+                        <div class="panel-3d-element">
+                            <div class="cube">
+                                <div class="face front"><i class="fas fa-chart-bar"></i></div>
+                                <div class="face back"><i class="fas fa-coins"></i></div>
+                                <div class="face right"><i class="fas fa-chart-pie"></i></div>
+                                <div class="face left"><i class="fas fa-wallet"></i></div>
+                                <div class="face top"><i class="fas fa-chart-line"></i></div>
+                                <div class="face bottom"><i class="fas fa-money-bill-wave"></i></div>
+                            </div>
+                        </div>
+                        <h3 class="panel-title">Smart Trading<br>Made Simple</h3>
+                        <p class="panel-text">Experience the power of AI-driven insights for smarter financial decisions.</p>
+                        <div class="feature-list">
+                            <div class="feature-item"><i class="fas fa-bolt"></i><span>Real-time Analytics</span></div>
+                            <div class="feature-item"><i class="fas fa-shield-alt"></i><span>Bank-grade Security</span></div>
+                            <div class="feature-item"><i class="fas fa-robot"></i><span>AI Assistant 24/7</span></div>
+                            <div class="feature-item"><i class="fas fa-gamepad"></i><span>Trading Simulator</span></div>
+                        </div>
+                        <div class="live-stats">
+                            <div class="live-stat">
+                                <span class="live-dot"></span>
+                                <span class="live-label">Markets Open</span>
+                            </div>
+                            <div class="live-stat">
+                                <span class="live-num" id="liveUsers">12,847</span>
+                                <span class="live-label">Online</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="app-sidebar" id="appSidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-logo"><i class="fas fa-chart-line"></i></div>
+                    <div class="brand-text">
+                        <h2>MoneyTrade</h2>
+                        <span>Pro Trader</span>
+                    </div>
+                </div>
+                <button class="sidebar-collapse" id="sidebarCollapse">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            <div class="user-stats-mini">
+                <div class="stat-mini">
+                    <span class="stat-mini-label">Balance</span>
+                    <span class="stat-mini-value" id="userBalance">$10,000.00</span>
+                </div>
+                <div class="stat-mini">
+                    <span class="stat-mini-label">P&L</span>
+                    <span class="stat-mini-value profit" id="userPnL">+$0.00</span>
+                </div>
+                <div class="stat-mini">
+                    <span class="stat-mini-label">XP</span>
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="xpFill"></div>
+                        <span class="xp-text" id="xpText">0/100</span>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-label">Main</span>
+                    <button class="nav-item active" data-view="chat">
+                        <i class="fas fa-comments"></i>
+                        <span>AI Chat</span>
+                        <span class="nav-badge">AI</span>
+                    </button>
+                    <button class="nav-item" data-view="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item" data-view="trading">
+                        <i class="fas fa-coins"></i>
+                        <span>Trading Sim</span>
+                        <span class="nav-badge new">NEW</span>
+                    </button>
+                    <button class="nav-item" data-view="portfolio">
+                        <i class="fas fa-wallet"></i>
+                        <span>Portfolio</span>
+                    </button>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-label">Recent Chats</span>
+                    <div class="chat-history-list" id="chatHistoryList">
+                        <div class="history-item active" data-chat="1">
+                            <i class="fas fa-message"></i>
+                            <span>Market Analysis Q4</span>
+                            <button class="delete-chat"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="history-item" data-chat="2">
+                            <i class="fas fa-message"></i>
+                            <span>Portfolio Review</span>
+                            <button class="delete-chat"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="history-item" data-chat="3">
+                            <i class="fas fa-message"></i>
+                            <span>Trading Strategies</span>
+                            <button class="delete-chat"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-label">Account</span>
+                    <button class="nav-item" data-view="achievements">
+                        <i class="fas fa-trophy"></i>
+                        <span>Achievements</span>
+                        <span class="nav-badge" id="achieveCount">3</span>
+                    </button>
+                    <button class="nav-item" data-view="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
+                </div>
+                <div class="nav-section admin-only" id="adminNavSection" style="display: none;">
+                    <span class="nav-label">Administration</span>
+                    <button class="nav-item" data-view="admin">
+                        <i class="fas fa-shield-halved"></i>
+                        <span>Admin</span>
+                        <span class="nav-badge">ADMIN</span>
+                    </button>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile" id="userProfileBtn">
+                    <div class="user-avatar">
+                        <span id="userAvatarText">JD</span>
+                        <div class="status-dot"></div>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">John Doe</span>
+                        <span class="user-plan"><i class="fas fa-crown"></i> Pro Trader</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Top Bar -->
+            <header class="app-topbar">
+                <button class="mobile-menu" id="mobileMenu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search markets, stocks, or ask anything..." id="globalSearch">
+                    <kbd>Ctrl K</kbd>
+                </div>
+                <div class="market-ticker" id="marketTicker">
+                    <div class="ticker-item"><span>AAPL</span><span class="ticker-price">$189.84</span><span class="ticker-change up">+2.4%</span></div>
+                    <div class="ticker-item"><span>BTC</span><span class="ticker-price">$45,234</span><span class="ticker-change up">+3.5%</span></div>
+                    <div class="ticker-item"><span>ETH</span><span class="ticker-price">$2,456</span><span class="ticker-change up">+2.1%</span></div>
+                    <div class="ticker-item"><span>TSLA</span><span class="ticker-price">$248.42</span><span class="ticker-change down">-1.2%</span></div>
+                </div>
+                <div class="topbar-actions">
+                    <button class="icon-btn" id="notifBtn" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-dot">3</span>
+                    </button>
+                    <button class="icon-btn" id="commandBtn" title="Command Palette (Ctrl+K)">
+                        <i class="fas fa-terminal"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Notifications Panel -->
+            <div class="notifications-panel" id="notifPanel">
+                <div class="notif-header">
+                    <h3>Notifications</h3>
+                    <button class="mark-read">Mark all read</button>
+                </div>
+                <div class="notif-list">
+                    <div class="notif-item unread">
+                        <div class="notif-icon success"><i class="fas fa-arrow-up"></i></div>
+                        <div class="notif-content">
+                            <span class="notif-title">AAPL reached your target</span>
+                            <span class="notif-desc">Apple stock hit $190, your alert threshold</span>
+                            <span class="notif-time">2 min ago</span>
+                        </div>
+                    </div>
+                    <div class="notif-item unread">
+                        <div class="notif-icon info"><i class="fas fa-newspaper"></i></div>
+                        <div class="notif-content">
+                            <span class="notif-title">Market News: Fed Decision</span>
+                            <span class="notif-desc">Federal Reserve announces interest rate decision</span>
+                            <span class="notif-time">15 min ago</span>
+                        </div>
+                    </div>
+                    <div class="notif-item unread">
+                        <div class="notif-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="notif-content">
+                            <span class="notif-title">Portfolio Alert</span>
+                            <span class="notif-desc">Tech sector dropped 3% - review positions</span>
+                            <span class="notif-time">1 hour ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Chat -->
+            <div class="view view-chat active" id="viewChat">
+                <div class="chat-container">
+                    <div class="chat-header-bar">
+                        <div class="chat-bot-info">
+                            <div class="bot-avatar-3d">
+                                <div class="bot-face">
+                                    <div class="bot-eye left"></div>
+                                    <div class="bot-eye right"></div>
+                                    <div class="bot-mouth"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h2>TradeBot AI <span class="bot-version">v2.0 Pro</span></h2>
+                                <div class="bot-status">
+                                    <span class="status-indicator"></span>
+                                    <span>Online • Ready to assist</span>
+                                    <span class="bot-power">⚡ GPT-4 Powered</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="icon-btn" id="clearChatBtn" title="Clear Chat"><i class="fas fa-trash"></i></button>
+                            <button class="icon-btn" id="exportChatBtn" title="Export Chat"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message-date-divider"><span>Today</span></div>
+                        <div class="message bot-message">
+                            <div class="message-avatar">
+                                <div class="mini-bot">
+                                    <div class="mini-eye"></div>
+                                    <div class="mini-eye"></div>
+                                </div>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <p>👋 Hello! I'm <strong>TradeBot AI</strong>, your personal trading assistant.</p>
+                                    <p>I can help you with:</p>
+                                    <div class="capabilities-grid">
+                                        <div class="capability"><i class="fas fa-chart-line"></i> Market Analysis</div>
+                                        <div class="capability"><i class="fas fa-wallet"></i> Portfolio</div>
+                                        <div class="capability"><i class="fas fa-shield-alt"></i> Risk</div>
+                                        <div class="capability"><i class="fas fa-bullseye"></i> Strategies</div>
+                                        <div class="capability"><i class="fas fa-newspaper"></i> News</div>
+                                        <div class="capability"><i class="fas fa-calculator"></i> Predictions</div>
+                                    </div>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">10:30 AM</span>
+                                    <span class="message-reactions">
+                                        <button class="react-btn">👍</button>
+                                        <button class="react-btn">❤️</button>
+                                        <button class="react-btn">🎯</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quick-actions" id="quickActions">
+                        <button class="quick-btn" data-prompt="Show me today's market overview"><i class="fas fa-chart-line"></i><span>Market</span></button>
+                        <button class="quick-btn" data-prompt="Analyze my portfolio performance"><i class="fas fa-wallet"></i><span>Portfolio</span></button>
+                        <button class="quick-btn" data-prompt="What are the latest crypto trends?"><i class="fab fa-bitcoin"></i><span>Crypto</span></button>
+                        <button class="quick-btn" data-prompt="Suggest trading strategies"><i class="fas fa-lightbulb"></i><span>Strategies</span></button>
+                        <button class="quick-btn" data-prompt="What are the biggest market risks?"><i class="fas fa-shield-alt"></i><span>Risk</span></button>
+                        <button class="quick-btn" data-prompt="Latest financial news"><i class="fas fa-newspaper"></i><span>News</span></button>
+                    </div>
+                    <div class="chat-input-container">
+                        <div class="chat-attachments" id="chatAttachments"></div>
+                        <div class="chat-input-wrapper">
+                            <button class="input-action-btn" id="attachBtn" title="Attach"><i class="fas fa-paperclip"></i></button>
+                            <input type="file" id="fileInput" hidden multiple accept="image/*,.pdf,.txt,.doc,.docx">
+                            <div class="input-field-wrap">
+                                <input type="text" class="chat-input" placeholder="Ask TradeBot anything..." id="chatInput" autocomplete="off">
+                                <div class="input-suggestions" id="inputSuggestions"></div>
+                            </div>
+                            <button class="input-action-btn" id="emojiBtn" title="Emoji"><i class="fas fa-smile"></i></button>
+                            <div class="emoji-picker" id="emojiPicker">
+                                <div class="emoji-grid">
+                                    <button>📈</button><button>📉</button><button>💰</button><button>💎</button>
+                                    <button>🚀</button><button>🎯</button><button>⚡</button><button>🔥</button>
+                                    <button>💪</button><button>🧠</button><button>🤖</button><button>👀</button>
+                                    <button>👍</button><button>👏</button><button>🙌</button><button>💯</button>
+                                    <button>❤️</button><button>😍</button><button>🤩</button><button>🥳</button>
+                                    <button>😎</button><button>🤔</button><button>😅</button><button>😂</button>
+                                </div>
+                            </div>
+                            <button class="input-action-btn" id="voiceInputBtn" title="Voice"><i class="fas fa-microphone"></i></button>
+                            <button class="send-btn" id="sendBtn" title="Send"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                        <div class="input-footer">
+                            <span><kbd>Enter</kbd> to send • <kbd>Ctrl+K</kbd> for commands</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Dashboard -->
+            <div class="view view-dashboard" id="viewDashboard">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card balance-card">
+                        <div class="card-header">
+                            <h3>Total Balance</h3>
+                            <button class="icon-btn-sm"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                        <div class="balance-amount">
+                            <span class="currency">$</span>
+                            <span class="amount" id="dashBalance">124,567.89</span>
+                        </div>
+                        <div class="balance-change">
+                            <span class="change up">+2,345.67 (1.92%)</span>
+                            <span class="change-period">Today</span>
+                        </div>
+                        <canvas id="balanceChart" class="mini-chart"></canvas>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Watchlist</h3>
+                            <button class="icon-btn-sm"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="watchlist" id="watchlist"></div>
+                    </div>
+                    <div class="dashboard-card market-overview">
+                        <div class="card-header">
+                            <h3>Market Overview</h3>
+                            <div class="tab-switcher">
+                                <button class="tab active" data-tab="indices">Indices</button>
+                                <button class="tab" data-tab="crypto">Crypto</button>
+                                <button class="tab" data-tab="forex">Forex</button>
+                            </div>
+                        </div>
+                        <div class="market-list" id="marketList"></div>
+                    </div>
+                    <div class="dashboard-card news-card">
+                        <div class="card-header">
+                            <h3>Latest News</h3>
+                            <button class="icon-btn-sm"><i class="fas fa-sync"></i></button>
+                        </div>
+                        <div class="news-list" id="newsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Trading Simulator -->
+            <div class="view view-trading" id="viewTrading">
+                <div class="trading-container">
+                    <div class="trading-header">
+                        <h2>Trading Simulator</h2>
+                        <div class="balance-display">
+                            <span>Virtual Balance:</span>
+                            <span class="balance-amount" id="tradingBalance">$10,000.00</span>
+                        </div>
+                    </div>
+                    <div class="trading-grid">
+                        <div class="trading-card">
+                            <h3>Available Assets</h3>
+                            <div class="asset-list" id="assetList"></div>
+                        </div>
+                        <div class="trading-card trade-form">
+                            <h3>Place Order</h3>
+                            <div class="trade-asset-info" id="tradeAssetInfo">
+                                <span>Select an asset to start trading</span>
+                            </div>
+                            <form class="trade-form-fields" id="tradeForm">
+                                <div class="form-row">
+                                    <label>Order Type</label>
+                                    <select id="orderType">
+                                        <option value="market">Market</option>
+                                        <option value="limit">Limit</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <label>Quantity</label>
+                                    <input type="number" id="tradeQuantity" min="0.001" step="0.001" placeholder="0.00">
+                                </div>
+                                <div class="form-row">
+                                    <label>Price (USD)</label>
+                                    <input type="number" id="tradePrice" step="0.01" placeholder="0.00">
+                                </div>
+                                <div class="trade-buttons">
+                                    <button type="button" class="trade-btn buy" id="buyBtn"><i class="fas fa-arrow-up"></i> Buy</button>
+                                    <button type="button" class="trade-btn sell" id="sellBtn"><i class="fas fa-arrow-down"></i> Sell</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="trading-card">
+                            <h3>Positions</h3>
+                            <div class="positions-list" id="positionsList">
+                                <div class="empty-state">No open positions</div>
+                            </div>
+                        </div>
+                        <div class="trading-card">
+                            <h3>Trade History</h3>
+                            <div class="trade-history" id="tradeHistory">
+                                <div class="empty-state">No trades yet</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Portfolio -->
+            <div class="view view-portfolio" id="viewPortfolio">
+                <div class="portfolio-header">
+                    <h2>Your Portfolio</h2>
+                    <div class="portfolio-stats">
+                        <div class="p-stat"><span>Total Value</span><strong id="portTotal">$0.00</strong></div>
+                        <div class="p-stat"><span>Total P&L</span><strong class="profit" id="portPnL">$0.00</strong></div>
+                        <div class="p-stat"><span>Best Performer</span><strong id="portBest">-</strong></div>
+                    </div>
+                </div>
+                <div class="portfolio-content">
+                    <div class="holdings-list" id="holdingsList"></div>
+                </div>
+            </div>
+
+            <!-- View: Achievements -->
+            <div class="view view-achievements" id="viewAchievements">
+                <div class="achievements-header">
+                    <h2>Achievements</h2>
+                    <p>Unlock rewards as you trade and learn</p>
+                </div>
+                <div class="achievements-grid" id="achievementsGrid"></div>
+            </div>
+
+            <!-- View: Settings -->
+            <div class="view view-settings" id="viewSettings">
+                <div class="settings-container">
+                    <h2>Settings</h2>
+                    <div class="settings-section">
+                        <h3>Appearance</h3>
+                        <div class="setting-item">
+                            <div><strong>Theme</strong><p>Choose your preferred color scheme</p></div>
+                            <select id="settingsTheme">
+                                <option value="default">Default (Indigo)</option>
+                                <option value="sunset">Sunset (Orange)</option>
+                                <option value="forest">Forest (Green)</option>
+                                <option value="purple">Purple (Pink)</option>
+                                <option value="ocean">Ocean (Blue)</option>
+                                <option value="rose">Rose (Red)</option>
+                                <option value="gold">Gold (Yellow)</option>
+                                <option value="neon">Neon (Lime)</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <div><strong>Mode</strong><p>Light or dark mode</p></div>
+                            <label class="switch"><input type="checkbox" id="darkModeToggle" checked><span class="slider"></span></label>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Notifications</h3>
+                        <div class="setting-item">
+                            <div><strong>Sound Effects</strong><p>Play sounds for actions</p></div>
+                            <label class="switch"><input type="checkbox" id="soundToggle" checked><span class="slider"></span></label>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Data & Privacy</h3>
+                        <div class="setting-item">
+                            <div><strong>Export Data</strong><p>Download all your data</p></div>
+                            <button class="btn-secondary" id="exportDataBtn">Export</button>
+                        </div>
+                        <div class="setting-item">
+                            <div><strong>Reset All</strong><p>Clear all data and start fresh</p></div>
+                            <button class="btn-danger" id="resetDataBtn">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Admin Dashboard -->
+            <div class="view view-admin" id="viewAdmin">
+                <div class="admin-header">
+                    <div>
+                        <h2><i class="fas fa-shield-halved"></i> Dashboard Administrateur</h2>
+                        <p>Platform overview &amp; user management</p>
+                    </div>
+                    <button class="btn-secondary" id="adminRefreshBtn"><i class="fas fa-sync"></i> Refresh</button>
+                </div>
+                <div class="dashboard-grid admin-stats-grid">
+                    <div class="dashboard-card admin-stat">
+                        <div class="admin-stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="admin-stat-body">
+                            <span class="admin-stat-label">Total Users</span>
+                            <span class="admin-stat-value" id="statUsers">-</span>
+                            <span class="admin-stat-sub" id="statUsersSub">+0 today</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card admin-stat">
+                        <div class="admin-stat-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="admin-stat-body">
+                            <span class="admin-stat-label">Total Balance</span>
+                            <span class="admin-stat-value" id="statBalance">-</span>
+                            <span class="admin-stat-sub" id="statAdmins">0 admins</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card admin-stat">
+                        <div class="admin-stat-icon"><i class="fas fa-coins"></i></div>
+                        <div class="admin-stat-body">
+                            <span class="admin-stat-label">Total Trades</span>
+                            <span class="admin-stat-value" id="statTrades">-</span>
+                            <span class="admin-stat-sub" id="statPositions">0 open positions</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card admin-stat">
+                        <div class="admin-stat-icon"><i class="fas fa-comments"></i></div>
+                        <div class="admin-stat-body">
+                            <span class="admin-stat-label">Messages</span>
+                            <span class="admin-stat-value" id="statMessages">-</span>
+                            <span class="admin-stat-sub" id="statConversations">0 conversations</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-card admin-users-card">
+                    <div class="card-header">
+                        <h3>Users</h3>
+                        <span class="admin-users-count" id="adminUsersCount"></span>
+                    </div>
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th class="num">Balance</th>
+                                    <th class="num">XP</th>
+                                    <th class="num">Trades</th>
+                                    <th>Role</th>
+                                    <th class="admin-actions-col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersBody">
+                                <tr><td colspan="7" class="admin-empty">Loading users...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Voice Modal -->
+    <div class="voice-modal" id="voiceModal">
+        <div class="voice-content">
+            <div class="voice-animation">
+                <div class="voice-ring"></div>
+                <div class="voice-ring"></div>
+                <div class="voice-ring"></div>
+                <div class="voice-mic"><i class="fas fa-microphone"></i></div>
+            </div>
+            <h3>Listening...</h3>
+            <p id="voiceTranscript">Speak now</p>
+            <div class="voice-actions">
+                <button class="voice-btn cancel" id="voiceCancel">Cancel</button>
+                <button class="voice-btn send" id="voiceSend">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-content">
+            <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3 id="confirmTitle">Are you sure?</h3>
+            <p id="confirmMessage">This action cannot be undone.</p>
+            <div class="confirm-actions">
+                <button class="btn-secondary" id="confirmCancel">Cancel</button>
+                <button class="btn-danger" id="confirmOk">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
